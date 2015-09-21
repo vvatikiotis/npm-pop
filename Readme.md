@@ -13,3 +13,5 @@ These steps keep package information, from the scratch step, and after cloning t
 - `npm start`
 
 We can use ES6. Transpilation by Babel on the fly, there's no build step to produce ES5 transpiled files.
+
+Use `npm` to install packages necessary for the development process, e.g. linters, gulp, etc. Use `jspm` to install client application packages, e.g. react, underscore, etc. 
