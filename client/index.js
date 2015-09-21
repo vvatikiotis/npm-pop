@@ -1,8 +1,14 @@
-import _ from 'underscore';
+import React from 'react';
 
-var arr = [1, 2, 3],
-    newArr = _.map(arr, (el) => {
-        return el * 5;
-    });
+var App = React.createClass({
+    render: function() {
+        return (
+            <div>Hello</div>
+        )
+    }
+});
 
-console.log(newArr);
+React.render(
+    <App />,
+    document.getElementById('app')
+);

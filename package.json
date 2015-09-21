@@ -20,6 +20,8 @@
       "baseURL": "client"
     },
     "dependencies": {
+      "react": "npm:react@^0.13.3",
+      "react-router": "npm:react-router@^1.0.0-rc1",
       "underscore": "npm:underscore@^1.8.3"
     },
     "devDependencies": {
