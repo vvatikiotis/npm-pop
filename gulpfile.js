@@ -5,7 +5,8 @@ var gulp = require('gulp'),
     PATHS = {
         src: {
             html: 'client/**/*.html',
-            js: 'client/**/*.js'
+            js: 'client/**/*.js',
+            css: 'client/**/*.css'
         }
     };
 
@@ -36,6 +37,7 @@ gulp.task('dev-watch', function() {
 
     gulp.watch(PATHS.src.html).on('change', reload);
     gulp.watch(PATHS.src.js).on('change', reload);
+    gulp.watch(PATHS.src.css).on('change', reload);
 });
 
 gulp.task('default', ['dev-watch']);
