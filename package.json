@@ -1,5 +1,5 @@
 {
-  "name": "jspm-es6-babelonthefly",
+  "name": "npm-pop",
   "version": "0.0.1",
   "description": "",
   "scripts": {
@@ -25,6 +25,9 @@
       "baseURL": "client"
     },
     "dependencies": {
+      "axios": "npm:axios@^0.6.0",
+      "bootstrap": "github:twbs/bootstrap@^3.3.5",
+      "css": "github:systemjs/plugin-css@^0.1.17",
       "react": "npm:react@^0.13.3",
       "react-router": "npm:react-router@^1.0.0-rc1",
       "underscore": "npm:underscore@^1.8.3"
