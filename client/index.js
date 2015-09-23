@@ -10,11 +10,20 @@ var Search = React.createClass({
     npmStatsURL: "https://api.npmjs.org/downloads/point",
 
     retrievePackageStats: function(packageName) {
-        axios.get(this.npmStatsURL + '/last-month/' + packageName)
-            .then((response) => {
-                console.dir(response.data);
-                this.props.onResults(response.data);
-            })
+        var stats = {
+            last_day: { name: 'Day', counts: null },
+            last_week: { name: 'Week', counts: null },
+            last_month: { name: 'Month', counts: null }
+        },
+        month_promise = axios.get(this.npmStatsURL + '/last-month/' + packageName)
+            .then((response) => { stats.last_month.counts = response.data.downloads;}),
+        week_promise = axios.get(this.npmStatsURL + '/last-week/' + packageName)
+            .then((response) => { stats.last_week.counts = response.data.downloads;}),
+        day_promise = axios.get(this.npmStatsURL + '/last-day/' + packageName)
+            .then((response) => { stats.last_day.counts = response.data.downloads;});
+
+        axios.all([month_promise, week_promise, day_promise])
+            .then( () => { this.props.onResults(stats); } );
     },
     handleSubmit: function(evt) {
             evt.preventDefault();
@@ -25,15 +34,12 @@ var Search = React.createClass({
     render: function() {
         return (
             <div className="row">
-                <div className="col-sm-12">
+                <div className="col-sm-2">
             <form className="form-horizontal"
                 onSubmit={this.handleSubmit}
             >
                 <div className="form-group">
-                    <label className="col-sm-2 control-label"
-                        htmlFor="packageName"
-                    >Search package</label>
-                    <div className="col-sm-10">
+                <div className="col-sm-12">
                         <input className="form-control"
                             id="packageName"
                             placeholder="Search package..."
@@ -49,22 +55,11 @@ var Search = React.createClass({
     }
 });
 
-
-var PackageInfo = React.createClass({
-    render: function() {
-
-        var obj = Object.keys(this.props.data).map((key) => {
-            return (<div><strong>{key}</strong>: {this.props.data[key]}</div>);
-        });
-        console.dir(obj);
-        return (
-            <div>{obj}</div>
-        );
-    }
-});
-
 var Results = React.createClass({
     render: function() {
+        console.log('Results ', this.props.packageInfo);
+        //var packageInfo = this.props.packageInfo || '';
+        //console.dir(packageInfo);
         return (
             <div className="row">
                 <div className="col-sm-12">
@@ -79,22 +74,45 @@ var Results = React.createClass({
     }
 });
 
+var PackageInfo = React.createClass({
+    render: function() {
+        console.log('PackageInfo ', this.props);
+        return (
+            <div>
+                <Stats period={this.props.data.last_month} />
+                <Stats period={this.props.data.last_week} />
+                <Stats period={this.props.data.last_week} />
+            </div>
+        );
+    }
+});
 
-
-var PACKAGE_RESULTS = {
-    downloads: 31241234,
-    package: "request",
-    start: "2015-09-21",
-    end: "2015-09-21"
-};
+var Stats = React.createClass({
+    render: function() {
+        var stats = '';
+        if (this.props.period) {
+            stats = <span>
+                Last {this.props.period.name}:&nbsp;
+                <strong>{this.props.period.counts.toLocaleString()}</strong> downloads
+            </span>
+        }
+        // console.log('period ',period);;
+        return (
+            <div>
+                {stats}
+            </div>
+        );
+    }
+});
 
 var App = React.createClass({
     getInitialState: function() {
         return {
-            searchResults: ''
+            searchResults: {}
         };
     },
     onResults: function(searchResults) {
+        console.log('searchResults ', searchResults);
         this.setState({
             searchResults: searchResults
         });
