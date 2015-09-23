@@ -13,6 +13,7 @@ gulp.task('clean', function() {
     return del(['dist']);
 });
 
+//FIXME build task correct output but never ends
 gulp.task('build', ['clean'], function() {
     return gulp.src(PATHS.src.js)
         // .pipe(plumber())
