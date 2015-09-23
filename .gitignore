@@ -1,5 +1,8 @@
 node_modules
 jspm_packages
+
+build
 dist
 
+*.cache
 npm-debug.log

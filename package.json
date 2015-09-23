@@ -14,23 +14,24 @@
     "eslint": "^1.5.0",
     "eslint-plugin-react": "^3.4.2",
     "gulp": "^3.9.0",
+    "gulp-exec": "^2.1.1",
     "gulp-plumber": "^1.0.1",
-    "gulp-shell": "^0.4.3",
+    "gulp-util": "^3.0.6",
     "html-dist": "^0.1.0",
     "jspm": "^0.16.6",
     "uglifyjs": "^2.4.10"
   },
   "jspm": {
     "directories": {
-      "baseURL": "client"
+      "baseURL": "src"
     },
     "dependencies": {
       "axios": "npm:axios@^0.6.0",
       "bootstrap": "github:twbs/bootstrap@^3.3.5",
+      "clean-css": "npm:clean-css@^3.4.4",
       "css": "github:systemjs/plugin-css@^0.1.17",
       "react": "npm:react@^0.13.3",
-      "react-router": "npm:react-router@^1.0.0-rc1",
-      "underscore": "npm:underscore@^1.8.3"
+      "react-router": "npm:react-router@^1.0.0-rc1"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",

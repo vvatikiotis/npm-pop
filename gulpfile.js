@@ -1,43 +1,72 @@
 var gulp = require('gulp'),
+    gutil = require('gulp-util'),
     del = require('del'),
+    cached = require('gulp-cached'),
     plumber = require('gulp-plumber'),
-    shell = require('gulp-shell'),
+    exec = require('child_process').exec,
     PATHS = {
         src: {
-            html: 'client/**/*.html',
-            js: 'client/**/*.js',
-            css: 'client/**/*.css'
-        }
+            html: 'src/**/*.html',
+            js: 'src/**/*.js',
+            css: 'src/**/*.css'
+        },
+        dist: 'dist',
+        build: 'build'
     };
 
-gulp.task('clean', function() {
-    return del(['dist']);
+////////////////////////////////////
+    /// Dev
+gulp.task('build-clean', function() {
+    return del([PATHS.build + '/**']);
 });
 
-//FIXME build task correct output but never ends
-gulp.task('build', ['clean'], function() {
+gulp.task('html', function() {
+    return gulp.src(PATHS.src.html)
+        .pipe(gulp.dest(PATHS.build + '/'));
+});
+
+gulp.task('js', function() {
     return gulp.src(PATHS.src.js)
-        // .pipe(plumber())
-        .pipe(shell([
-            'jspm bundle-sfx index.js dist/index.js',
-            './node_modules/.bin/uglifyjs dist/index.js -o dist/app.min.js',
-            './node_modules/.bin/html-dist client/index.html --remove-all --minify --insert app.min.js -o dist/index.html'
-        ]));
+        .pipe(gulp.dest(PATHS.build + '/'));
 });
 
-gulp.task('dev-watch', function() {
+gulp.task('css', function() {
+    return gulp.src(PATHS.src.css)
+        .pipe(gulp.dest(PATHS.build + '/'));
+});
+
+gulp.task('dev-watch', ['build-clean', 'html', 'js', 'css'], function() {
     var browserSync = require('browser-sync'),
         reload = browserSync.reload;
 
     browserSync({
         server: {
-            baseDir: 'client'
+            baseDir: PATHS.build
         }
     });
 
-    gulp.watch(PATHS.src.html).on('change', reload);
-    gulp.watch(PATHS.src.js).on('change', reload);
-    gulp.watch(PATHS.src.css).on('change', reload);
+    gulp.watch(PATHS.src.html, ['html']).on('change', reload);
+    gulp.watch(PATHS.src.js, ['js']).on('change', reload);
+    gulp.watch(PATHS.src.css, ['css']).on('change', reload);
 });
+
+
+
+
+////////////////////////////////////
+/// Dist
+gulp.task('dist-clean', function() {
+    return del(['dist']);
+});
+
+//FIXME build task correct output but never ends
+gulp.task('dist', ['clean'], function() {
+    return gulp.src(PATHS.src.js)
+        // .pipe(plumber())
+        .pipe(shell([
+            'jspm bundle-sfx index.js dist/index.js',
+        ]));
+});
+
 
 gulp.task('default', ['dev-watch']);
